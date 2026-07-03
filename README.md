@@ -32,6 +32,23 @@ git push heroku main
 
 Detail: [docs/HEROKU.md](docs/HEROKU.md) · Add a bot: [docs/ADDING_A_BOT.md](docs/ADDING_A_BOT.md)
 
+## Heroku student plan — will it go away?
+
+**Short answer:** Nothing public suggests it is about to end, but **yes, it could be reduced or removed** — same as any GitHub Student Developer Pack partner offer.
+
+| What we know (2026) | |
+| ------------------- | --- |
+| **Still listed** | Heroku remains a [Student Pack partner](https://www.heroku.com/github-students/) — about **$13/month platform credit for 24 months** (dynos, Heroku Postgres/KV; not third-party add-ons). |
+| **Partner offers change** | [GitHub’s SDP FAQ](https://github.com/github-education-resources/Student-Developer-Pack-Current-Partners-FAQ) states benefits can change scope or leave the pack; partners sometimes pause or exit with limited notice. |
+| **Precedent** | Heroku dropped the **free tier in 2022**; student credits are a separate, explicit program — but it is not a permanent entitlement. |
+| **After you redeem** | If Heroku leaves the pack while you are enrolled, you usually keep the **already-granted credit term** (see GitHub/Heroku terms at signup time). |
+
+**Is a sudden retraction *likely*?** Not more likely than for other Pack partners — there is no announced sunset. Treat it as **convenient while it lasts**, not a long-term infra guarantee.
+
+**If credits disappear or you graduate:** this host is plain Node + Express + discord.js — portable to Railway, Fly.io, Render, a $5 VPS, etc. One dyno running several bots keeps the escape cost low. See [docs/HEROKU.md](docs/HEROKU.md) for deploy steps today; plan B is re-point `git push` and env vars elsewhere, not rewrite bot logic.
+
+*Last checked against public Heroku/GitHub docs: July 2026 — verify before budgeting.*
+
 ## Architecture
 
 ```text
