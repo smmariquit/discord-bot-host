@@ -1,0 +1,22 @@
+{
+  "name": "discord-bot-host",
+  "description": "Single Heroku dyno running multiple Discord bots",
+  "repository": "https://github.com/smmariquit/discord-bot-host",
+  "keywords": ["discord", "bot", "heroku"],
+  "env": {
+    "ENABLED_BOTS": {
+      "description": "Comma-separated bot ids: pizza,crib,comskies",
+      "value": "pizza,crib,comskies"
+    },
+    "LOG_LEVEL": {
+      "description": "Log verbosity",
+      "value": "info"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

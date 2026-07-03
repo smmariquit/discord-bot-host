@@ -1,0 +1,35 @@
+{
+  "name": "discord-bot-host",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Single Heroku dyno running multiple Discord bots (Pizzabot, TheCribMC, Comskies, …)",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "heroku-postbuild": "npm run build",
+    "register-commands": "bun src/register-commands.ts",
+    "register-commands:all": "bun src/register-commands.ts all",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test src",
+    "lint": "biome check .",
+    "check": "biome check . && bun run typecheck && bun test src && bun run build"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0",
+    "@types/bun": "^1.2.4",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
