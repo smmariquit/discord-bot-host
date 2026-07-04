@@ -49,14 +49,14 @@ curl https://your-app.herokuapp.com/health
 
 ## Health check
 
-`GET /health` returns `200` when every **enabled** bot client is `ready`. Returns `503` during startup or if a bot failed login — useful for uptime monitors.
+`GET /health` returns `200` when every **enabled** bot client is `ready`. Returns `503` during startup or if a bot failed login: useful for uptime monitors.
 
 ## Scaling notes
 
 - **One dyno** runs all bots in one Node process (fine for low-traffic community bots).
-- If one bot misbehaves, it currently shares the process — split to a second Heroku app only if needed.
+- If one bot misbehaves, it currently shares the process: split to a second Heroku app only if needed.
 - `SIGTERM` (Heroku dyno restart) destroys all clients gracefully.
 
 ## UPLB Tools bot
 
-The heavier [uplbtools/discord-bot](https://github.com/uplbtools/discord-bot) (HTTP webhooks, cron, GitHub) can stay on its **own** Heroku app or be wired in later via `UPLB_` prefix + optional dependency — not bundled in v0.1.
+The heavier [uplbtools/discord-bot](https://github.com/uplbtools/discord-bot) (HTTP webhooks, cron, GitHub) can stay on its **own** Heroku app or be wired in later via `UPLB_` prefix + optional dependency: not bundled in v0.1.
