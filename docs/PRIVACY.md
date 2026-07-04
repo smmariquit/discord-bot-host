@@ -6,9 +6,9 @@ This host runs multiple Discord bots in a single deployment. This policy covers 
 
 ## What we process
 
-- **Discord account data** from enabled bots when users invoke slash commands — passed through to the relevant bot handler only.
+- **Discord account data** from enabled bots when users invoke slash commands: passed through to the relevant bot handler only.
 - **Health-check HTTP requests** to `/health` (minimal technical metadata).
-- **Environment configuration** (bot tokens, guild IDs) stored on the host — never logged in plaintext.
+- **Environment configuration** (bot tokens, guild IDs) stored on the host: never logged in plaintext.
 
 ## What we do not do
 
