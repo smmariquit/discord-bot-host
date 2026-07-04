@@ -69,6 +69,12 @@ Heroku web dyno
 | `bun run register-commands:all` | Register all configured bots |
 | `bun run check` | Lint, test, build |
 
+## Legal
+
+- [Privacy Policy](docs/PRIVACY.md)
+- [Terms of Service](docs/TERMS.md)
+- UPLB Tools org policy (when live): [uplbtools.me/privacy](https://uplbtools.me/privacy)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
