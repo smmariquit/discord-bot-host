@@ -13,9 +13,9 @@ Child repos stay the **source of truth** for bot logic during development (`bun 
 ## Local dev
 
 ```sh
-cp .env.example .env   # fill tokens; set ENABLED_BOTS to bots you have creds for
+cp .env.example .env # fill tokens; set ENABLED_BOTS to bots you have creds for
 bun install
-bun run register-commands:all   # or: bun run register-commands pizza
+bun run register-commands:all # or: bun run register-commands pizza
 bun run dev
 curl localhost:3000/health
 ```
@@ -53,11 +53,11 @@ Detail: [docs/HEROKU.md](docs/HEROKU.md) · Add a bot: [docs/ADDING_A_BOT.md](do
 
 ```text
 Heroku web dyno
-├── Express  GET /health  (503 until all enabled bots are ready)
+├── Express GET /health (503 until all enabled bots are ready)
 └── Discord clients (one login per bot id)
-    ├── pizza   → PIZZA_DISCORD_TOKEN
-    ├── crib    → CRIB_DISCORD_TOKEN
-    └── comskies → COMSKIES_DISCORD_TOKEN
+ ├── pizza → PIZZA_DISCORD_TOKEN
+ ├── crib → CRIB_DISCORD_TOKEN
+ └── comskies → COMSKIES_DISCORD_TOKEN
 ```
 
 ## Scripts

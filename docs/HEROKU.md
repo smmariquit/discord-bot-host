@@ -11,7 +11,7 @@ Heroku requires a web process binding `PORT`. This host:
 ## Create app
 
 ```sh
-heroku create smmariquit-discord-bots   # name varies
+heroku create smmariquit-discord-bots # name varies
 heroku git:remote -a smmariquit-discord-bots
 ```
 
