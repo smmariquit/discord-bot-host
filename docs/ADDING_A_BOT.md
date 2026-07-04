@@ -6,15 +6,15 @@ Bot adapters live in `src/bots/{id}.ts`. Each child repo ([pizzabot](https://git
 
 ### Checklist
 
-1. **Child repo** — bot works with `bun run dev` and documents its env vars.
-2. **Host adapter** — add `src/bots/yourbot.ts`:
-   - `id`, `label`, `envPrefix`
-   - `isConfigured()` → checks `{PREFIX}_DISCORD_TOKEN`
-   - `createCommands()` → slash command definitions
-3. **Registry** — import in `src/bots/registry.ts`, add to `allBotModules`, extend `tokenForModule`.
-4. **Env** — document `{PREFIX}_*` in `.env.example`.
-5. **ENABLED_BOTS** — include new id in README table.
-6. **Deploy** — `heroku config:set NEWBOT_DISCORD_TOKEN=…` and add id to `ENABLED_BOTS`.
+1. **Child repo**: bot works with `bun run dev` and documents its env vars.
+2. **Host adapter**: add `src/bots/yourbot.ts`:
+ - `id`, `label`, `envPrefix`
+ - `isConfigured()` → checks `{PREFIX}_DISCORD_TOKEN`
+ - `createCommands()` → slash command definitions
+3. **Registry**: import in `src/bots/registry.ts`, add to `allBotModules`, extend `tokenForModule`.
+4. **Env**: document `{PREFIX}_*` in `.env.example`.
+5. **ENABLED_BOTS**: include new id in README table.
+6. **Deploy**: `heroku config:set NEWBOT_DISCORD_TOKEN=…` and add id to `ENABLED_BOTS`.
 
 ### Env prefix convention
 
@@ -24,15 +24,15 @@ Bot adapters live in `src/bots/{id}.ts`. Each child repo ([pizzabot](https://git
 | `CRIB_` | TheCribMC |
 | `COMSKIES_` | Comskies |
 
-Use uppercase prefix + underscore. Required keys per bot:
+Use uppercase prefix + highlight. Required keys per bot:
 
 - `{PREFIX}_DISCORD_TOKEN`
 - `{PREFIX}_DISCORD_CLIENT_ID` (for `register-commands` only)
 
 Optional:
 
-- `{PREFIX}_DISCORD_GUILD_ID` — dev guild command registration
-- `{PREFIX}_PUBLIC_WEBSITE_URL` — info command links
+- `{PREFIX}_DISCORD_GUILD_ID`: dev guild command registration
+- `{PREFIX}_PUBLIC_WEBSITE_URL`: info command links
 
 ## Future
 
