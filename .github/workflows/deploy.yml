@@ -14,7 +14,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - uses: heroku/setup-heroku@v1
+      - name: Install Heroku CLI
+        run: npm install --global heroku
       - name: Push slug to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
