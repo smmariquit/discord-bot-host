@@ -11,6 +11,6 @@ if (!existsSync(resolve(target, "dist/runtime.js"))) {
   execFileSync("git", ["clone", "--depth", "1", "https://github.com/uplbtools/discord-bot.git", target], {
     stdio: "inherit",
   });
-  execFileSync("npm", ["install", "--ignore-scripts"], { cwd: target, stdio: "inherit" });
+  execFileSync("npm", ["install", "--include=dev", "--ignore-scripts"], { cwd: target, stdio: "inherit" });
   execFileSync("npm", ["run", "build"], { cwd: target, stdio: "inherit" });
 }

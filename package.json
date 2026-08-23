@@ -17,7 +17,7 @@
     "check": "biome check . && bun run typecheck && bun test src && bun run build"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "dependencies": {
     "discord.js": "^14.18.0",
