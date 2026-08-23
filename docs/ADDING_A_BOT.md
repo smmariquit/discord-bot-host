@@ -15,6 +15,7 @@ Bot adapters live in `src/bots/{id}.ts`. Each child repo ([pizzabot](https://git
 4. **Env**: document `{PREFIX}_*` in `.env.example`.
 5. **ENABLED_BOTS**: include new id in README table.
 6. **Deploy**: `heroku config:set NEWBOT_DISCORD_TOKEN=…` and add id to `ENABLED_BOTS`.
+   Code changes deploy automatically after merging to `main`; config-var changes take effect after `heroku restart`.
 
 ### Env prefix convention
 
@@ -23,6 +24,7 @@ Bot adapters live in `src/bots/{id}.ts`. Each child repo ([pizzabot](https://git
 | `PIZZA_` | Pizzabot |
 | `CRIB_` | TheCribMC |
 | `COMSKIES_` | Comskies |
+| `ISKORD_` | Iskord Batch 2026 |
 
 Use uppercase prefix + highlight. Required keys per bot:
 
@@ -33,6 +35,10 @@ Optional:
 
 - `{PREFIX}_DISCORD_GUILD_ID`: dev guild command registration
 - `{PREFIX}_PUBLIC_WEBSITE_URL`: info command links
+
+## Current limitation
+
+The standalone bot repositories remain their own source trees today. A push to `pizzabot`, `comskies-bot`, `Iskord-2026`, or `uplbtools/discord-bot` does not deploy this host automatically; merge the corresponding central-host change to `main`. Do not silently run both a standalone bot and its host adapter with the same token.
 
 ## Future
 

@@ -7,6 +7,7 @@ Run **multiple Discord bots in one Heroku web dyno**: shared HTTP health check, 
 | `pizza` | [smmariquit/pizzabot](https://github.com/smmariquit/pizzabot) | `PIZZA_` |
 | `crib` | [smmariquit/thecribmc-bot](https://github.com/smmariquit/thecribmc-bot) | `CRIB_` |
 | `comskies` | [smmariquit/comskies-bot](https://github.com/smmariquit/comskies-bot) | `COMSKIES_` |
+| `iskord-2026` | [james-jaron/Iskord-2026](https://github.com/james-jaron/Iskord-2026) | `ISKORD_` |
 
 Child repos stay the **source of truth** for bot logic during development (`bun run dev` solo). This host is what you deploy to Heroku.
 
@@ -24,13 +25,15 @@ curl localhost:3000/health
 
 ```sh
 heroku create your-bot-host
-heroku config:set ENABLED_BOTS=pizza,crib,comskies
+heroku config:set ENABLED_BOTS=pizza,crib,comskies,iskord-2026,uplbtools
 heroku config:set PIZZA_DISCORD_TOKEN=... PIZZA_DISCORD_CLIENT_ID=...
 # … repeat per bot prefix
 git push heroku main
 ```
 
 Detail: [docs/HEROKU.md](docs/HEROKU.md) · Add a bot: [docs/ADDING_A_BOT.md](docs/ADDING_A_BOT.md)
+
+Production integration details: [docs/INTEGRATION.md](docs/INTEGRATION.md)
 
 ## Heroku student plan: will it go away?
 
@@ -57,7 +60,8 @@ Heroku web dyno
 └── Discord clients (one login per bot id)
  ├── pizza → PIZZA_DISCORD_TOKEN
  ├── crib → CRIB_DISCORD_TOKEN
- └── comskies → COMSKIES_DISCORD_TOKEN
+ ├── comskies → COMSKIES_DISCORD_TOKEN
+ └── iskord-2026 → ISKORD_DISCORD_TOKEN
 ```
 
 ## Scripts
@@ -73,7 +77,7 @@ Heroku web dyno
 
 - [Privacy Policy](docs/PRIVACY.md)
 - [Terms of Service](docs/TERMS.md)
-- UPLB Tools org policy (when live): [uplbtools.me/privacy](https://uplbtools.me/privacy)
+- UPLB Tools org policy: [uplbtools.me/privacy](https://uplbtools.me/privacy)
 
 ## License
 

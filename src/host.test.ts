@@ -10,7 +10,7 @@ describe("host config", () => {
 
 describe("bot registry", () => {
   test("knows pizza, crib, comskies", () => {
-    expect(allBotModules.map((m) => m.id)).toEqual(["pizza", "crib", "comskies"]);
+    expect(allBotModules.map((m) => m.id)).toEqual(["pizza", "crib", "comskies", "iskord-2026"]);
     expect(getBotModule("pizza")?.envPrefix).toBe("PIZZA");
   });
 });

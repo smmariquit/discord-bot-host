@@ -1,7 +1,8 @@
 import express from "express";
+import type { Express } from "express";
 import type { BotHandle } from "./types.js";
 
-export function createServer(handles: BotHandle[]) {
+export function createServer(handles: BotHandle[], mountedApps: Express[] = []) {
   const app = express();
 
   app.get("/health", (_req, res) => {
@@ -23,6 +24,8 @@ export function createServer(handles: BotHandle[]) {
   app.get("/", (_req, res) => {
     res.type("text/plain").send("discord-bot-host — see /health");
   });
+
+  for (const mountedApp of mountedApps) app.use(mountedApp);
 
   return app;
 }

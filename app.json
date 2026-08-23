@@ -1,12 +1,12 @@
 {
   "name": "discord-bot-host",
-  "description": "Single Heroku dyno running multiple Discord bots",
+  "description": "Single Heroku dyno running multiple Discord bots (including Iskord Batch 2026)",
   "repository": "https://github.com/smmariquit/discord-bot-host",
   "keywords": ["discord", "bot", "heroku"],
   "env": {
     "ENABLED_BOTS": {
-      "description": "Comma-separated bot ids: pizza,crib,comskies",
-      "value": "pizza,crib,comskies"
+      "description": "Comma-separated bot ids: pizza,crib,comskies,iskord-2026,uplbtools",
+      "value": "pizza,crib,comskies,iskord-2026,uplbtools"
     },
     "LOG_LEVEL": {
       "description": "Log verbosity",

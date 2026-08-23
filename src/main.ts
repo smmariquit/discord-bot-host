@@ -3,7 +3,7 @@ import { createBotHost } from "./host.js";
 import { log } from "./log.js";
 
 async function main() {
-  const host = createBotHost();
+  const host = await createBotHost();
   await host.start();
 
   const shutdown = async (signal: string) => {

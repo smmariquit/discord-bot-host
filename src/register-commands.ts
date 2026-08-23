@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { REST, Routes } from "discord.js";
-import { readPrefixedEnv } from "./config.js";
+import { parseEnabledBots, readPrefixedEnv } from "./config.js";
 import { allBotModules } from "./bots/registry.js";
 import { log } from "./log.js";
 
@@ -35,14 +35,33 @@ async function registerOne(botId: string) {
   }
 }
 
+async function registerUplbTools() {
+  const token = readPrefixedEnv("UPLB", "DISCORD_TOKEN");
+  if (!token) {
+    log("warn", "[uplbtools] skip — missing UPLB_DISCORD_TOKEN");
+    return;
+  }
+  const runtimePath = new URL("../.vendor/uplbtools/dist/runtime.js", import.meta.url).href;
+  const { loadBotConfigFromEnv, registerSlashCommands } = await import(runtimePath);
+  await registerSlashCommands(loadBotConfigFromEnv({ envPrefix: "UPLB_" }));
+  log("info", "[uplbtools] registered slash commands");
+}
+
 async function main() {
   const target = process.argv[2]?.trim().toLowerCase();
+  if (target === "uplbtools") {
+    await registerUplbTools();
+    return;
+  }
   if (target && target !== "all") {
     await registerOne(target);
     return;
   }
   for (const mod of allBotModules) {
     await registerOne(mod.id);
+  }
+  if (parseEnabledBots(process.env.ENABLED_BOTS ?? "").includes("uplbtools")) {
+    await registerUplbTools();
   }
 }
 

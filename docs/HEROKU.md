@@ -39,7 +39,23 @@ Locally:
 bun run register-commands:all
 ```
 
-## Deploy
+## Automatic deployment from GitHub
+
+The repository includes two workflows:
+
+- `Check` runs on pull requests and pushes to `main`.
+- `Deploy to Heroku` runs only after `Check` succeeds on `main`.
+
+Add these GitHub Actions repository secrets once:
+
+```text
+HEROKU_API_KEY   # Heroku account API key
+HEROKU_APP_NAME  # exact Heroku app name
+```
+
+After that, a merged push to `main` deploys the host. Discord tokens remain Heroku config vars and never enter GitHub.
+
+Manual deploy (useful for recovery):
 
 ```sh
 git push heroku main
@@ -59,4 +75,4 @@ curl https://your-app.herokuapp.com/health
 
 ## UPLB Tools bot
 
-The heavier [uplbtools/discord-bot](https://github.com/uplbtools/discord-bot) (HTTP webhooks, cron, GitHub) can stay on its **own** Heroku app or be wired in later via `UPLB_` prefix + optional dependency: not bundled in v0.1.
+The host fetches and builds [uplbtools/discord-bot](https://github.com/uplbtools/discord-bot) during Heroku's postbuild, then calls `createUplbToolsRuntime({ envPrefix: "UPLB_", listen: false })`. Its Discord client, cron jobs, and webhook routes share this dyno; the host owns `PORT`. Enable it with `uplbtools` in `ENABLED_BOTS` and set the `UPLB_*` vars from its `.env.example`.
