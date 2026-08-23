@@ -46,9 +46,7 @@ function deny(interaction: ChatInputCommandInteraction): Promise<unknown> {
 
 function degreeOption(option: { addStringOption: (fn: (option: any) => any) => any }) {
   return option.addStringOption((o: any) =>
-    o.setName("degree_program").setDescription("Degree-program role name").setRequired(true).addChoices(
-      ...DEGREE_PROGRAMS.map((name) => ({ name, value: name })),
-    ),
+    o.setName("degree_program").setDescription("Degree-program role name").setRequired(true),
   );
 }
 
