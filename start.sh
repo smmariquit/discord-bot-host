@@ -6,7 +6,7 @@ if [ -n "$GOOGLE_CREDENTIALS_JSON" ]; then
   printf '%s' "$GOOGLE_TOKEN_JSON" > nagger/token.json
   printf '%s' "$NAGGER_CONFIG_JSON" > nagger/config.json
   ( while true; do
-      python3 nagger/nagger.py >> /tmp/nag.log 2>&1
+      python3 nagger/nagger.py 2>&1 | sed 's/^/[nagger] /'
       sleep 300
     done ) &
 fi
