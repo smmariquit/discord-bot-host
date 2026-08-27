@@ -55,14 +55,44 @@ Production integration details: [docs/INTEGRATION.md](docs/INTEGRATION.md)
 ## Architecture
 
 ```text
-Heroku web dyno
-├── Express GET /health (503 until all enabled bots are ready)
-└── Discord clients (one login per bot id)
- ├── pizza → PIZZA_DISCORD_TOKEN
- ├── crib → CRIB_DISCORD_TOKEN
- ├── comskies → COMSKIES_DISCORD_TOKEN
- └── iskord-2026 → ISKORD_DISCORD_TOKEN
+Heroku web dyno (Procfile: web: bash start.sh)
+├── node dist/main.js (primary process)
+│   ├── Express GET /health (503 until all enabled bots are ready)
+│   └── Discord clients (one login per bot id)
+│       ├── pizza → PIZZA_DISCORD_TOKEN
+│       ├── crib → CRIB_DISCORD_TOKEN
+│       ├── comskies → COMSKIES_DISCORD_TOKEN
+│       └── iskord-2026 → ISKORD_DISCORD_TOKEN
+└── classroom nagger loop (python3 nagger/nagger.py every 5 min, background)
 ```
+
+## Classroom nagger (piggyback)
+
+`nagger/nagger.py` is a Python sidecar that polls Google Classroom for
+coursework due within 48h that is not turned in, and escalates
+(48h/5h/2h/1h/30m/10m, then every check under 10 minutes) via email
+(Gmail API) and Telegram. Source of truth:
+[smmariquit/classroom-nagger](https://github.com/smmariquit/classroom-nagger);
+the copy here is what deploys.
+
+How it runs: `start.sh` writes three config vars to disk at boot, starts
+the loop in the background, then `exec`s the node host. The `heroku/python`
+buildpack (added before `heroku/nodejs`) installs `requirements.txt`.
+Log lines are prefixed `[nagger]` in the dyno logs.
+
+| Config var | Content |
+| ---------- | ------- |
+| `GOOGLE_CREDENTIALS_JSON` | OAuth desktop client (GCP project MCP Setup) |
+| `GOOGLE_TOKEN_JSON` | Authorized user token, Classroom read + gmail.send scopes |
+| `NAGGER_CONFIG_JSON` | Channels: `email_to`, `telegram_token`, `telegram_chat_id`, `discord_webhook` |
+
+Caveats: the dyno filesystem is ephemeral, so `seen.json` (nag dedupe
+state) resets on every deploy/restart, expect one repeat nag per pending
+deadline after a deploy. Desktop notifications and the `gh` GitHub channel
+are inert on Heroku (no display, no gh CLI). To disable the nagger
+entirely, unset `GOOGLE_CREDENTIALS_JSON`, `start.sh` then skips the loop.
+Token refresh happens in-memory per boot; if Google revokes the refresh
+token, re-consent locally and update `GOOGLE_TOKEN_JSON`.
 
 ## Scripts
 
