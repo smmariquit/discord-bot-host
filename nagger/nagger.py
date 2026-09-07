@@ -189,7 +189,10 @@ def nag_meetings(now, seen, gmail):
 
 
 def main():
-    seen = json.loads(STATE_FILE.read_text()) if STATE_FILE.exists() else {}
+    try:
+        seen = json.loads(STATE_FILE.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        seen = {}  # missing or truncated state file, start fresh
     now = dt.datetime.now(TZ)
     # ponytail: meetings need no Google auth, so they run even when the token is dead
     try:
