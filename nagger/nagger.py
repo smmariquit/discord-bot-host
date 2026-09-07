@@ -9,7 +9,10 @@ config.json:
 {
   "email_to": "smmariquit@up.edu.ph",
   "github_repo": "smmariquit/nags",
-  "discord_webhook": ""   // paste a channel webhook URL to enable
+  "discord_webhook": "",  // paste a channel webhook URL to enable
+  "meetings": [           // optional, nagged on the same ladder, no Google needed
+    {"title": "PJDSC x UPCSG call", "when": "2026-09-09T17:00", "link": "https://..."}
+  ]
 }
 
 Cron (every 2 hours):
@@ -150,13 +153,56 @@ def notify_discord(summary, body, critical):
         print(f"discord failed: {e}")
 
 
+def tier_for(hours_left):
+    return next(label for th, label in TIERS if hours_left <= th)
+
+
+def fire(gmail, summary, body, critical):
+    notify_desktop(summary, body, critical)
+    notify_email(gmail, summary, body)
+    notify_github(summary, body)
+    notify_telegram(summary, body)
+    notify_discord(summary, body, critical)
+
+
+def nag_meetings(now, seen, gmail):
+    """config.json "meetings": [{"title": ..., "when": ISO local time, "link": optional}]."""
+    nagged = 0
+    for m in CONFIG.get("meetings", []):
+        when = dt.datetime.fromisoformat(m["when"])
+        if when.tzinfo is None:
+            when = when.replace(tzinfo=TZ)
+        hours_left = (when - now).total_seconds() / 3600
+        if not (0 < hours_left <= NAG_HOURS):
+            continue
+        tier = tier_for(hours_left)
+        key = f"meeting:{m['title']}:{when:%Y%m%d%H%M}:{tier}"
+        if tier == "10m":
+            key += f":{now:%H%M}"
+        if seen.get(key):
+            continue
+        seen[key] = True
+        nagged += 1
+        body = f"{when:%a %b %d, %I:%M %p} ({hours_left:.1f}h left).\n{m.get('link', '')}"
+        fire(gmail, f"Meeting: {m['title']}", body, hours_left <= CRITICAL_HOURS)
+    return nagged
+
+
 def main():
-    c = creds()
-    service = build("classroom", "v1", credentials=c)
-    gmail = build("gmail", "v1", credentials=c)
     seen = json.loads(STATE_FILE.read_text()) if STATE_FILE.exists() else {}
     now = dt.datetime.now(TZ)
-    nagged = 0
+    # ponytail: meetings need no Google auth, so they run even when the token is dead
+    try:
+        c = creds()
+        service = build("classroom", "v1", credentials=c)
+        gmail = build("gmail", "v1", credentials=c)
+    except Exception as e:
+        print(f"google auth failed, skipping classroom: {e}")
+        n = nag_meetings(now, seen, None)
+        STATE_FILE.write_text(json.dumps(seen))
+        print(f"{now:%F %T} sent {n} meeting nags")
+        return
+    nagged = nag_meetings(now, seen, gmail)
 
     courses = service.courses().list(
         studentId="me", courseStates=["ACTIVE"]
@@ -181,7 +227,7 @@ def main():
             if state in ("TURNED_IN", "RETURNED"):
                 continue
 
-            tier = next(label for th, label in TIERS if hours_left <= th)
+            tier = tier_for(hours_left)
             key = f"{work['id']}:{tier}"
             if tier == "10m":
                 # fire on every check in the endgame
@@ -196,11 +242,7 @@ def main():
                 f"Due {due:%a %b %d, %I:%M %p} ({hours_left:.0f}h left), "
                 f"not turned in.\n{work.get('alternateLink', '')}"
             )
-            notify_desktop(summary, body, critical)
-            notify_email(gmail, summary, body)
-            notify_github(summary, body)
-            notify_telegram(summary, body)
-            notify_discord(summary, body, critical)
+            fire(gmail, summary, body, critical)
 
     STATE_FILE.write_text(json.dumps(seen))
     print(f"{now:%F %T} checked {len(courses)} courses, sent {nagged} nags")
