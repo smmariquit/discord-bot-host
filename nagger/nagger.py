@@ -61,8 +61,12 @@ def creds():
             c = None
     if not c or not c.valid:
         if c and c.expired and c.refresh_token:
-            c.refresh(Request())
-        else:
+            try:
+                c.refresh(Request())
+            except Exception as e:
+                print(f"refresh failed ({e}), re-consenting")
+                c = None
+        if not c or not c.valid:
             flow = InstalledAppFlow.from_client_secrets_file(
                 HERE / "credentials.json", SCOPES
             )
