@@ -12,7 +12,7 @@ describe("attendance", () => {
     expect(parseDynoVoiceEmbed("<@5> left voice channel <#111>", "ID: 5", "a", 0)[0].kind).toBe(
       "leave",
     );
-    const sw = parseDynoVoiceEmbed("<@5> switched voice channel <#222> -> <#111>", "ID: 5", "a", 0);
+    const sw = parseDynoVoiceEmbed("<@5> switched voice channels <#222> -> <#111>", "ID: 5", "a", 0);
     expect(sw.map((e) => [e.channelId, e.kind])).toEqual([
       ["222", "leave"],
       ["111", "join"],
