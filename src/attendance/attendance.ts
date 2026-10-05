@@ -28,7 +28,7 @@ const TZ = "Asia/Manila";
 
 /**
  * Dyno's voice log embeds read "<@user> joined|left voice channel <#chan>" or
- * "<@user> switched voice channel <#old> -> <#new>", with "ID: <user>" in the footer.
+ * "<@user> switched voice channels <#old> -> <#new>", with "ID: <user>" in the footer.
  * ponytail: Dyno's #logs is the store of every join. Swap to our own table if Dyno ever leaves.
  */
 export function parseDynoVoiceEmbed(
@@ -47,7 +47,7 @@ export function parseDynoVoiceEmbed(
   if (/\bleft voice channel\b/.test(description) && channels[0]) {
     return [{ ...base, channelId: channels[0], kind: "leave" }];
   }
-  if (/\bswitched voice channel\b/.test(description) && channels.length >= 2) {
+  if (/\bswitched voice channels?\b/.test(description) && channels.length >= 2) {
     return [
       { ...base, channelId: channels[0], kind: "leave" },
       { ...base, channelId: channels[1], kind: "join" },
