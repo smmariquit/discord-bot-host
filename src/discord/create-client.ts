@@ -1,16 +1,10 @@
-import {
-  Client,
-  Collection,
-  Events,
-  GatewayIntentBits,
-  SlashCommandBuilder,
-} from "discord.js";
+import { Client, Collection, Events, GatewayIntentBits, SlashCommandBuilder } from "discord.js";
 import { log } from "../log.js";
 import type { BotClient, BotModule, SlashCommand } from "../types.js";
 
 export function createBotClient(module: BotModule, commands: SlashCommand[]): BotClient {
   const client = new Client({
-    intents: [GatewayIntentBits.Guilds],
+    intents: [GatewayIntentBits.Guilds, ...(module.intents ?? [])],
   }) as BotClient;
 
   client.commands = new Collection(commands.map((cmd) => [cmd.data.name, cmd]));
@@ -36,6 +30,7 @@ export function createBotClient(module: BotModule, commands: SlashCommand[]): Bo
     }
   });
 
+  module.setup?.(client);
   return client;
 }
 
