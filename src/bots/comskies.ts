@@ -20,7 +20,7 @@ const WELCOME_BANNER = fileURLToPath(
 /** Same text and banner Comskies posted in #welcome before the move to this host. */
 function welcomeMessage(userId: string, memberCount: number) {
   return {
-    content: `Welcome to the unofficial **ICS Discord Server**, <@${userId}>! <a:ICS_wave:1452943522364657664>`,
+    content: `Welcome to the **ICS Students' Discord Server**, <@${userId}>! <a:ICS_wave:1452943522364657664>`,
     embeds: [
       new EmbedBuilder()
         .setColor(0x0d59bb)
