@@ -2,6 +2,7 @@ import type {
   ChatInputCommandInteraction,
   Client,
   Collection,
+  GatewayIntentBits,
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
@@ -24,6 +25,10 @@ export type BotModule = {
   envPrefix: string;
   isConfigured: () => boolean;
   createCommands: () => SlashCommand[];
+  /** Extra gateway intents beyond Guilds */
+  intents?: GatewayIntentBits[];
+  /** Attach event handlers beyond slash commands */
+  setup?: (client: BotClient) => void;
 };
 
 export type BotHandle = {
