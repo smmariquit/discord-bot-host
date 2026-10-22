@@ -31,6 +31,8 @@ import urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import drill
+
 HERE = Path(__file__).parent
 TZ = ZoneInfo("Asia/Manila")
 INTERVALS_DAYS = [1, 2, 4, 8, 16, 32]
@@ -157,10 +159,15 @@ def main():
     deck = json.loads((HERE / "cards.json").read_text())
     state = load_state()
     updates = tg("getUpdates", http_timeout=POLL_S + 10, timeout=POLL_S,
-                 offset=state.get("offset", 0), allowed_updates=["message"])
+                 offset=state.get("offset", 0), allowed_updates=["message", "callback_query"])
     now = dt.datetime.now(TZ)
     for u in updates:
         state["offset"] = u["update_id"] + 1
+        try:
+            if drill.handle(u, tg, now):  # Daily Ten links and answers, from any chat
+                continue
+        except Exception as e:
+            print(f"drill handle failed: {e}")
         m = u.get("message") or {}
         text = m.get("text", "")
         # trust boundary: only the configured chat answers, commands are ignored
@@ -188,6 +195,10 @@ def main():
         elif card := pick(state, deck, now):
             send(state, card, now)
             print(f"{card['id']}: sent")
+    try:
+        drill.tick(tg, now)
+    except Exception as e:
+        print(f"drill tick failed: {e}")
     save_state(state)
 
 
