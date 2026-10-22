@@ -10,3 +10,5 @@ dist/
 .vscode/*
 !.vscode/extensions.json
 coverage/
+nagger/cards.json
+nagger/srs.json

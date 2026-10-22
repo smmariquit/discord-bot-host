@@ -9,5 +9,13 @@ if [ -n "$GOOGLE_CREDENTIALS_JSON" ]; then
       python3 nagger/nagger.py 2>&1 | sed 's/^/[nagger] /'
       sleep 300
     done ) &
+  # spaced-repetition drill, deck from SRS_CARDS_JSON (kept out of the public repo)
+  if [ -n "$SRS_CARDS_JSON" ]; then
+    printf '%s' "$SRS_CARDS_JSON" > nagger/cards.json
+    ( while true; do
+        python3 nagger/srs.py 2>&1 | sed 's/^/[srs] /'
+        sleep 5
+      done ) &
+  fi
 fi
 exec node dist/main.js
