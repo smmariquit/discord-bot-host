@@ -1,5 +1,4 @@
 import { ChannelType, Events } from "discord.js";
-import { readPrefixedEnv } from "../config.js";
 import { log } from "../log.js";
 import type { BotClient } from "../types.js";
 
@@ -99,11 +98,8 @@ async function postIfDue(client: BotClient, tag: string, channelId: string): Pro
   log("info", `[${tag}] posted qotd: ${question}`);
 }
 
-/** Posts one question a week to {PREFIX}_QOTD_CHANNEL_ID. Off when the channel is unset. */
-export function attachWeeklyQuestion(client: BotClient, prefix: string): void {
-  const tag = prefix.toLowerCase();
-  const channelId = readPrefixedEnv(prefix, "QOTD_CHANNEL_ID");
-  if (!channelId) return;
+/** Posts one question a week to the given channel. */
+export function attachWeeklyQuestion(client: BotClient, tag: string, channelId: string): void {
   const tick = () =>
     postIfDue(client, tag, channelId).catch((err) => log("error", `[${tag}] qotd: ${String(err)}`));
   client.once(Events.ClientReady, () => {
