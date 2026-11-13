@@ -1,9 +1,11 @@
 import { readPrefixedEnv, requirePrefixedEnv } from "../config.js";
 import { buildInfoCommand, buildPingCommand } from "../discord/create-client.js";
+import { attachWeeklyQuestion } from "../qotd/weekly-question.js";
 import type { BotModule } from "../types.js";
 
 const PREFIX = "PIZZA";
 const DEFAULT_URL = "https://joinpizza.fun";
+const QOTD_CHANNEL_ID = "1392516402853707936";
 
 export const pizzaModule: BotModule = {
   id: "pizza",
@@ -11,6 +13,9 @@ export const pizzaModule: BotModule = {
   envPrefix: PREFIX,
   isConfigured() {
     return Boolean(readPrefixedEnv(PREFIX, "DISCORD_TOKEN"));
+  },
+  setup(client) {
+    attachWeeklyQuestion(client, "pizza", QOTD_CHANNEL_ID);
   },
   createCommands() {
     const website = readPrefixedEnv(PREFIX, "PUBLIC_WEBSITE_URL") ?? DEFAULT_URL;
